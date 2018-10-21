@@ -1,0 +1,24 @@
+{
+    "name": "pure_nodejs_monitor_api",
+    "version": "1.0.0",
+    "description": "A Pure Node.js API that monitors the status of certain resources.",
+    "main": "index.js",
+    "dependencies": {
+        "@types/node": "^10.12.0"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "compile": "tsc index.ts -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ArmandoHerra/Pure_NodeJS_Monitor_API.git"
+    },
+    "author": "Armando Herra",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ArmandoHerra/Pure_NodeJS_Monitor_API/issues"
+    },
+    "homepage": "https://github.com/ArmandoHerra/Pure_NodeJS_Monitor_API#readme"
+}
