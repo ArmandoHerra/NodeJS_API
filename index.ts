@@ -28,13 +28,10 @@ const server = http.createServer((req: any, res: any) => {
     req.on("end", () => {
         buffer += decoder.end();
         // Choose the handler the request should go to. If one is not found. Use the NotFound handler.
-        console.log("trimmedPath: ", trimmedPath);
-        console.log("typeof router[trimmedPath]: ", typeof router[trimmedPath]);
         var chosenHandler =
             typeof router[trimmedPath] !== undefined
                 ? router[trimmedPath]
                 : handlers.notFound;
-        console.log("chosenHandler: ", chosenHandler);
         // Construct the data object to send to the handler.
         var data: any = {
             trimmedPath: trimmedPath,
@@ -52,6 +49,7 @@ const server = http.createServer((req: any, res: any) => {
             // Convert the payload to a string.
             var payloadString = JSON.stringify(payload);
             // Send the response.
+            res.setHeader("Content-Type", "application/json");
             res.writeHead(statusCode);
             res.end(payloadString);
             console.log("Returning this response: ", statusCode, payloadString);
