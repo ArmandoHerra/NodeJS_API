@@ -1,14 +1,12 @@
-const http = require("http");
-const url = require("url");
-const StringDecoder = require("string_decoder").StringDecoder;
-
-interface LooseObject {
-    [key: string]: any;
-}
+import http from "http";
+import { StringDecoder } from "string_decoder";
+import url from "url";
+import config from "./config";
+import { LooseObject } from "./interfaces";
 
 const server = http.createServer((req: LooseObject, res: LooseObject) => {
     const parsedURL = url.parse(req.url, true);
-    const path = parsedURL.pathname;
+    const path: string = parsedURL.pathname || "";
     const trimmedPath: string = path.replace(/^\/+|\/+$/g, "");
     const queryStringObject: object = parsedURL.query;
     const method = req.method.toLowerCase();
@@ -16,7 +14,7 @@ const server = http.createServer((req: LooseObject, res: LooseObject) => {
     const decoder = new StringDecoder("utf-8");
     let buffer = "";
 
-    req.on("data", (data: object) => {
+    req.on("data", (data: Buffer) => {
         buffer += decoder.write(data);
     });
 
@@ -46,8 +44,12 @@ const server = http.createServer((req: LooseObject, res: LooseObject) => {
     });
 });
 
-server.listen(3000, () => {
-    console.log("The server is listening on port 3000 now!");
+server.listen(config.port, () => {
+    console.log(
+        `The server is listening on port ${config.port} in ${
+            config.envName
+        } mode!`
+    );
 });
 
 const handlers: LooseObject = {};

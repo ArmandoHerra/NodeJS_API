@@ -1,12 +1,18 @@
 {
     "compilerOptions": {
-        /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
-        "target": "es6",
+        "outDir": "server",
+        "allowJs": true,
+        "target": "esnext",
         "module": "commonjs",
-        "sourceMap": true,
+        "moduleResolution": "node",
+        "noEmit": false,
         "strict": true,
+        "isolatedModules": true,
         "esModuleInterop": true,
-        "sourceRoot": "",
-        "mapRoot": ""
-    }
+        "sourceMap": true,
+        "sourceRoot": "./server/sourceMaps",
+        "mapRoot": "./server/sourceMaps"
+    },
+    "include": ["./src"],
+    "exclude": ["node_modules", "./src/interfaces.ts"]
 }
