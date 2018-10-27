@@ -1,2 +1,2 @@
-# Pure_NodeJS_Monitor_API
-A Pure Node.js API that monitors the status of certain resources.
+# TypeScript_NodeJS_RESTful_API
+A TypeScript Node.js RESTful API. The API leverages the internal Node.js API and does not use any external dependencies other than the development dependencies for linting and compiling TypeScript.
