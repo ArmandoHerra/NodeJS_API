@@ -80,10 +80,8 @@ const unifiedServer = (req: LooseObject, res: LooseObject): void => {
 
 const handlers: LooseObject = {};
 
-handlers.sample = (data: object, callback: any): void => {
-    callback(406, {
-        name: "sample-handler"
-    });
+handlers.ping = (data: object, callback: any) => {
+    callback(200);
 };
 
 handlers.notFound = (data: object, callback: any) => {
@@ -91,5 +89,5 @@ handlers.notFound = (data: object, callback: any) => {
 };
 
 const router: LooseObject = {
-    sample: handlers.sample
+    ping: handlers.ping
 };
