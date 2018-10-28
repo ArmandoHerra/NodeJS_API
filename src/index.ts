@@ -1,10 +1,44 @@
+import fs from "fs";
 import http from "http";
+import https from "https";
 import { StringDecoder } from "string_decoder";
 import url from "url";
 import config from "./config";
 import { LooseObject } from "./interfaces";
 
-const server = http.createServer((req: LooseObject, res: LooseObject) => {
+const httpServer = http.createServer((req: LooseObject, res: LooseObject) => {
+    unifiedServer(req, res);
+});
+
+httpServer.listen(config.httpPort, () => {
+    console.log(
+        `The server is listening on port ${config.httpPort} in ${
+            config.envName
+        } mode!`
+    );
+});
+
+const httpsServerOptions: LooseObject = {
+    cert: fs.readFileSync(__dirname + "/https/cert.pem"),
+    key: fs.readFileSync(__dirname + "/https/key.pem")
+};
+
+const httpsServer = https.createServer(
+    httpsServerOptions,
+    (req: LooseObject, res: LooseObject) => {
+        unifiedServer(req, res);
+    }
+);
+
+httpsServer.listen(config.httpsPort, () => {
+    console.log(
+        `The server is listening on port ${config.httpsPort} in ${
+            config.envName
+        } mode!`
+    );
+});
+
+const unifiedServer = (req: LooseObject, res: LooseObject): void => {
     const parsedURL = url.parse(req.url, true);
     const path: string = parsedURL.pathname || "";
     const trimmedPath: string = path.replace(/^\/+|\/+$/g, "");
@@ -42,15 +76,7 @@ const server = http.createServer((req: LooseObject, res: LooseObject) => {
             res.end(payloadString);
         });
     });
-});
-
-server.listen(config.port, () => {
-    console.log(
-        `The server is listening on port ${config.port} in ${
-            config.envName
-        } mode!`
-    );
-});
+};
 
 const handlers: LooseObject = {};
 
