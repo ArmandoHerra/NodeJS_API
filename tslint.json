@@ -13,7 +13,8 @@
         "object-literal-shorthand": [true, "never"],
         "trailing-comma": [false],
         "no-any": false,
-        "no-console": [false]
+        "no-console": [false],
+        "no-shadowed-variable": [false]
     },
     "rulesDirectory": []
 }

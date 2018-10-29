@@ -5,6 +5,7 @@ import { StringDecoder } from "string_decoder";
 import url from "url";
 import config from "./config";
 import { LooseObject } from "./interfaces";
+import _data from "./lib/data";
 
 const httpServer = http.createServer((req: LooseObject, res: LooseObject) => {
     unifiedServer(req, res);
@@ -55,7 +56,7 @@ const unifiedServer = (req: LooseObject, res: LooseObject): void => {
     req.on("end", () => {
         buffer += decoder.end();
         const chosenHandler =
-            typeof router[trimmedPath] !== undefined
+            typeof router[trimmedPath] !== "undefined"
                 ? router[trimmedPath]
                 : handlers.notFound;
 
@@ -80,14 +81,20 @@ const unifiedServer = (req: LooseObject, res: LooseObject): void => {
 
 const handlers: LooseObject = {};
 
+handlers.hello = (data: object, callback: any) => {
+    callback(200, { message: "Welcome to Hello World Endpoint!!!" });
+};
+
 handlers.ping = (data: object, callback: any) => {
     callback(200);
 };
 
 handlers.notFound = (data: object, callback: any) => {
-    callback(404);
+    callback(404, { message: "No such endpoint!" });
 };
 
 const router: LooseObject = {
+    hello: handlers.hello,
+    notFound: handlers.notFound,
     ping: handlers.ping
 };

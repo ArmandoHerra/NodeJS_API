@@ -14,5 +14,5 @@
         "mapRoot": "./server/sourceMaps"
     },
     "include": ["./src"],
-    "exclude": ["node_modules", "./src/interfaces.ts"]
+    "exclude": ["node_modules"]
 }
