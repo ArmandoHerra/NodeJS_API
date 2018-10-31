@@ -3,9 +3,11 @@ import http from "http";
 import https from "https";
 import { StringDecoder } from "string_decoder";
 import url from "url";
-import config from "./config";
-import { LooseObject } from "./interfaces";
+import config from "./lib/config";
 import _data from "./lib/data";
+import handlers from "./lib/handlers";
+import helpers from "./lib/helpers";
+import { LooseObject } from "./lib/interfaces";
 
 const httpServer = http.createServer((req: LooseObject, res: LooseObject) => {
     unifiedServer(req, res);
@@ -63,7 +65,7 @@ const unifiedServer = (req: LooseObject, res: LooseObject): void => {
         const data: object = {
             headers: headers,
             method: method,
-            payload: buffer,
+            payload: helpers.parseJsonToObject(buffer),
             queryStringObject: queryStringObject,
             trimmedPath: trimmedPath
         };
@@ -79,22 +81,8 @@ const unifiedServer = (req: LooseObject, res: LooseObject): void => {
     });
 };
 
-const handlers: LooseObject = {};
-
-handlers.hello = (data: object, callback: any) => {
-    callback(200, { message: "Welcome to Hello World Endpoint!!!" });
-};
-
-handlers.ping = (data: object, callback: any) => {
-    callback(200);
-};
-
-handlers.notFound = (data: object, callback: any) => {
-    callback(404, { message: "No such endpoint!" });
-};
-
 const router: LooseObject = {
-    hello: handlers.hello,
     notFound: handlers.notFound,
-    ping: handlers.ping
+    ping: handlers.ping,
+    users: handlers.users
 };

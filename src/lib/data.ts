@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { LooseObject } from "../interfaces";
+import helpers from "./helpers";
+import { LooseObject } from "./interfaces";
 
 const lib: LooseObject = {};
 
@@ -27,7 +28,9 @@ lib.create = (dir: string, file: string, data: object, callback: any): void => {
                     }
                 });
             } else {
-                callback("Could not create new file, it may already exist.");
+                callback(
+                    "Could not create new file, it may already exist or the directory path is not correct."
+                );
             }
         }
     );
@@ -35,10 +38,11 @@ lib.create = (dir: string, file: string, data: object, callback: any): void => {
 
 lib.read = (dir: string, file: string, callback: any): void => {
     fs.readFile(`${lib.baseDir}${dir}/${file}.json`, "utf8", (error, data) => {
-        if (!error) {
-            callback(false, data);
+        if (!error && data) {
+            const parsedData: object = helpers.parseJsonToObject(data);
+            callback(false, parsedData);
         } else {
-            callback("Error reading file, it may not exist.");
+            callback(error, data);
         }
     });
 };
