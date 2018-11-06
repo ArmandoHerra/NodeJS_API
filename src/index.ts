@@ -84,5 +84,6 @@ const unifiedServer = (req: LooseObject, res: LooseObject): void => {
 const router: LooseObject = {
     notFound: handlers.notFound,
     ping: handlers.ping,
+    tokens: handlers.tokens,
     users: handlers.users
 };

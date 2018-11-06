@@ -27,4 +27,23 @@ helpers.parseJsonToObject = (str: string) => {
     }
 };
 
+// Create a string of random alphanumeric characters, of a given length.
+helpers.createRandomString = (strLen: any) => {
+    strLen = typeof strLen === "number" && strLen > 0 ? strLen : false;
+    if (strLen) {
+        const possibleCharacters =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+        let str = "";
+        for (let i = 1; i <= strLen; i++) {
+            const randomChar = possibleCharacters.charAt(
+                Math.floor(Math.random() * possibleCharacters.length)
+            );
+            str += randomChar;
+        }
+        return str;
+    } else {
+        return false;
+    }
+};
+
 export default helpers;
