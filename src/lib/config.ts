@@ -6,14 +6,16 @@ environments.development = {
     envName: "development",
     hashingSecret: "b%~+}QoEPaB=@5ou*#8q6~RmYBcZ=K40nq37",
     httpPort: 3000,
-    httpsPort: 3001
+    httpsPort: 3001,
+    maxChecks: 5
 };
 
 environments.production = {
     envName: "production",
     hashingSecret: "7)EGLh3_7NP:h-!UkZp>pz)eeRYP9VapzZri",
     httpPort: 5000,
-    httpsPort: 5001
+    httpsPort: 5001,
+    maxChecks: 5
 };
 
 const currentEnvironment =

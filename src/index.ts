@@ -82,6 +82,7 @@ const unifiedServer = (req: LooseObject, res: LooseObject): void => {
 };
 
 const router: LooseObject = {
+    checks: handlers.checks,
     notFound: handlers.notFound,
     ping: handlers.ping,
     tokens: handlers.tokens,
