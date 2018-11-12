@@ -1,4 +1,6 @@
 import crypto from "crypto";
+import https from "https";
+import querystring from "querystring";
 import config from "./config";
 import { LooseObject } from "./interfaces";
 
@@ -43,6 +45,58 @@ helpers.createRandomString = (strLen: any) => {
         return str;
     } else {
         return false;
+    }
+};
+
+// Send an SMS message via Twilio.
+helpers.sendTwilioSMS = (phone: string, msg: string, callback: any) => {
+    const phoneNum: string | boolean =
+        typeof phone === "string" && phone.trim().length === 10
+            ? phone.trim()
+            : false;
+    const message: string | boolean =
+        typeof msg === "string" &&
+        msg.trim().length > 0 &&
+        msg.trim().length <= 1600
+            ? msg.trim()
+            : false;
+
+    if (phoneNum && message) {
+        const payload: LooseObject = {
+            Body: message,
+            From: config.twilio.fromPhone,
+            To: `+52${phoneNum}`
+        };
+        const stringPayload = querystring.stringify(payload);
+        const requestDetails: LooseObject = {
+            auth: `${config.twilio.accountSid}:${config.twilio.authToken}`,
+            headers: {
+                "Content-Length": Buffer.byteLength(stringPayload),
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            hostname: "api.twilio.com",
+            method: "POST",
+            path: `/2010-04-01/Accounts/${
+                config.twilio.accountSid
+            }/Messages.json`,
+            protocol: "https:"
+        };
+        console.log(payload);
+        const req = https.request(requestDetails, (response: any) => {
+            const status = response.statusCode;
+            if (status === 200 || status === 201) {
+                callback(false);
+            } else {
+                callback(`Status code returned was: ${status}`);
+            }
+        });
+        req.on("error", (error: any) => {
+            callback({ Error: `${error}` });
+        });
+        req.write(stringPayload);
+        req.end();
+    } else {
+        callback("Given parameters are missing or invalid.");
     }
 };
 

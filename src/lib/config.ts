@@ -1,4 +1,5 @@
 import { LooseObject } from "./interfaces";
+import twilioConfig from "./twilio";
 
 const environments: LooseObject = {};
 
@@ -7,7 +8,8 @@ environments.development = {
     hashingSecret: "b%~+}QoEPaB=@5ou*#8q6~RmYBcZ=K40nq37",
     httpPort: 3000,
     httpsPort: 3001,
-    maxChecks: 5
+    maxChecks: 5,
+    twilio: { ...twilioConfig }
 };
 
 environments.production = {
@@ -15,7 +17,8 @@ environments.production = {
     hashingSecret: "7)EGLh3_7NP:h-!UkZp>pz)eeRYP9VapzZri",
     httpPort: 5000,
     httpsPort: 5001,
-    maxChecks: 5
+    maxChecks: 5,
+    twilio: { ...twilioConfig }
 };
 
 const currentEnvironment =
