@@ -4,13 +4,16 @@
  *
  */
 
-// Dependencies.
+// Node Dependencies.
 const fs = require("fs");
 const url = require("url");
 const http = require("http");
 const https = require("https");
 const StringDecoder = require("string_decoder").StringDecoder;
+
+// Own Dependencies.
 const config = require("./config");
+const _data = require("./lib/data");
 
 // Instantiate the HTTP server.
 const httpServer = http.createServer((req, res) => {
