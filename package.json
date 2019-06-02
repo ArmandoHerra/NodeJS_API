@@ -4,9 +4,13 @@
     "description": "A Pure Node.js API that monitors the status of certain resources.",
     "main": "index.js",
     "dependencies": {},
-    "devDependencies": {},
+    "devDependencies": {
+        "eslint": "^5.16.0",
+        "eslint-config-strongloop": "^2.1.0"
+    },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "pretest": "eslint --ignore-path .gitignore ."
     },
     "repository": {
         "type": "git",
