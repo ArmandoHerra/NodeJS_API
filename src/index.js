@@ -5,13 +5,48 @@
  */
 
 // Dependencies.
-const http = require("http");
+const fs = require("fs");
 const url = require("url");
+const http = require("http");
+const https = require("https");
 const StringDecoder = require("string_decoder").StringDecoder;
 const config = require("./config");
 
-// The server should respond to all requests with a string.
-const server = http.createServer((req, res) => {
+// Instantiate the HTTP server.
+const httpServer = http.createServer((req, res) => {
+    unifiedServer(req, res);
+});
+
+// Start the HTTP server, and have it listen on the environment port.
+httpServer.listen(config.httpPort, () => {
+    console.log(
+        `The server is listening on port ${config.httpPort} in ${
+            config.envName
+        } mode`
+    );
+});
+
+// Instantiate the HTTPS server.
+const httpsServerOptions = {
+    key: fs.readFileSync(__dirname + "/https/key.pem"),
+    cert: fs.readFileSync(__dirname + "/https/cert.pem")
+};
+
+const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
+    unifiedServer(req, res);
+});
+
+// Start the HTTPS server, and have it listen on the environment port.
+httpsServer.listen(config.httpsPort, () => {
+    console.log(
+        `The server is listening on port ${config.httpsPort} in ${
+            config.envName
+        } mode`
+    );
+});
+
+// All the server logic for both the HTTP and HTTPS server.
+const unifiedServer = (req, res) => {
     // Get the URL and parse it.
     const parsedUrl = url.parse(req.url, true);
 
@@ -73,22 +108,12 @@ const server = http.createServer((req, res) => {
             console.log("Returning this response: ", statusCode, payload);
         });
     });
-});
-
-// Start the server, and have it listen on port 3000.
-server.listen(config.port, () => {
-    console.log(
-        `The server is listening on port ${config.port} in ${
-            config.envName
-        } mode`
-    );
-});
+};
 
 // Define the handlers.
 const handlers = {};
 
 // Sample handler.
-
 handlers.sample = (data, cb) => {
     // Callback a http status code, and a payload object.
     cb(406, {
@@ -97,7 +122,6 @@ handlers.sample = (data, cb) => {
 };
 
 // Not found handler.
-
 handlers.notFound = (data, cb) => cb(404);
 
 // Define a request router.
