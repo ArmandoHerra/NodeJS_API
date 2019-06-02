@@ -14,6 +14,7 @@ const StringDecoder = require("string_decoder").StringDecoder;
 // Own Dependencies.
 const config = require("./config");
 const _data = require("./lib/data");
+const handlers = require("./lib/handlers");
 
 // Instantiate the HTTP server.
 const httpServer = http.createServer((req, res) => {
@@ -113,16 +114,8 @@ const unifiedServer = (req, res) => {
     });
 };
 
-// Define the handlers.
-const handlers = {};
-
-// Ping handler.
-handlers.ping = (data, cb) => cb(200);
-
-// Not found handler.
-handlers.notFound = (data, cb) => cb(404);
-
 // Define a request router.
 const router = {
-    ping: handlers.ping
+    ping: handlers.ping,
+    users: handlers.users
 };
