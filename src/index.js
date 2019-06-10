@@ -12,8 +12,9 @@ const https = require("https");
 const StringDecoder = require("string_decoder").StringDecoder;
 
 // Own Dependencies.
-const config = require("./config");
+const config = require("./lib/config");
 const _data = require("./lib/data");
+const helpers = require('./lib/helpers');
 const handlers = require("./lib/handlers");
 
 // Instantiate the HTTP server.
@@ -25,7 +26,7 @@ const httpServer = http.createServer((req, res) => {
 httpServer.listen(config.httpPort, () => {
     console.log(
         `The server is listening on port ${config.httpPort} in ${
-            config.envName
+        config.envName
         } mode`
     );
 });
@@ -44,7 +45,7 @@ const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
 httpsServer.listen(config.httpsPort, () => {
     console.log(
         `The server is listening on port ${config.httpsPort} in ${
-            config.envName
+        config.envName
         } mode`
     );
 });
@@ -89,7 +90,7 @@ const unifiedServer = (req, res) => {
             queryStringObject: queryStringObject,
             method: method,
             headers: headers,
-            payload: buffer
+            payload: helpers.parseJsonToObject(buffer)
         };
 
         // route the request to the handler specified in the router.

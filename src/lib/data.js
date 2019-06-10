@@ -6,6 +6,7 @@
 // Dependencies.
 const fs = require("fs");
 const path = require("path");
+const helpers = require('./helpers')
 
 // Container for the moule (to be exported).
 const lib = {};
@@ -47,7 +48,12 @@ lib.create = (dir, file, data, cb) => {
 // Read data from a file.
 lib.read = (dir, file, cb) => {
     fs.readFile(`${lib.baseDir}${dir}/${file}.json`, "utf-8", (err, data) => {
-        cb(err, data);
+        if (!err && data) {
+            const parsedData = helpers.parseJsonToObject(data)
+            cb(false, parsedData)
+        } else {
+            cb(err, data);
+        }
     });
 };
 
