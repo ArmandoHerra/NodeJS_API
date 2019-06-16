@@ -32,5 +32,24 @@ helpers.parseJsonToObject = (str) => {
     }
 }
 
+// Create a string of random alphanumeric characters, of a given length.
+helpers.createRandomString = (strLength) => {
+    if (typeof (strLength) == 'number' && strLength > 0 ? strLength : false) {
+        // Define all the possible characters that could go in the string.
+        const possibleChars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+        // Start the final str.
+        let str = ''
+        for (let i = 1; i <= strLength; i++) {
+            // Get a random character from the possibleChars string.
+            let randomCharacter = possibleChars.charAt(Math.floor(Math.random() * possibleChars.length))
+            // Append this character to the final str.
+            str += randomCharacter
+        }
+        return str
+    } else {
+        return false
+    }
+}
+
 // Export the moodule.
 module.exports = helpers
