@@ -108,8 +108,8 @@ handlers._users.get = (data, callback) => {
         handlers._tokens.verifyToken(token, phone, (tokenIsValid) => {
             if (tokenIsValid) {
                 // Lookup the user.
-                _data.read('users', phone, (err, dataReadData) => {
-                    if (!err && dataReadData) {
+                _data.read('users', phone, (dataReadError, dataReadData) => {
+                    if (!dataReadError && dataReadData) {
                         // Remove the hashed password from the user obj before retuning it.
                         delete dataReadData.hashedPassword;
                         callback(200, dataReadData);
@@ -162,8 +162,8 @@ handlers._users.put = (data, callback) => {
             handlers._tokens.verifyToken(token, phone, (tokenIsValid) => {
                 if (tokenIsValid) {
                     // Lookup user.
-                    _data.read('users', phone, (err, dataReadData) => {
-                        if (!err && dataReadData) {
+                    _data.read('users', phone, (dataReadError, dataReadData) => {
+                        if (!dataReadError && dataReadData) {
                             // Update the necessary fields.
                             if (firstName) dataReadData.firstName = firstName;
                             if (lastName) dataReadData.lastName = lastName;
@@ -219,8 +219,8 @@ handlers._users.delete = (data, callback) => {
         handlers._tokens.verifyToken(token, phone, (tokenIsValid) => {
             if (tokenIsValid) {
                 // Lookup the user.
-                _data.read('users', phone, (err, dataReadData) => {
-                    if (!err && dataReadData) {
+                _data.read('users', phone, (dataReadError, dataReadData) => {
+                    if (!dataReadError && dataReadData) {
                         _data.delete('users', phone, (dataDeleteError) => {
                             if (!dataDeleteError) {
                                 callback(200);
@@ -329,8 +329,8 @@ handlers._tokens.get = (data, callback) => {
         : false;
     if (id) {
         // Lookup the token.
-        _data.read('tokens', id, (err, dataReadData) => {
-            if (!err && dataReadData) {
+        _data.read('tokens', id, (dataReadError, dataReadData) => {
+            if (!dataReadError && dataReadData) {
                 callback(200, dataReadData);
             } else {
                 callback(404);
@@ -426,8 +426,8 @@ handlers._tokens.delete = (data, callback) => {
 // Verify if a given token id is currently valid for a given user.
 handlers._tokens.verifyToken = (id, phone, callback) => {
     // Lookup the token.
-    _data.read('tokens', id, (err, data) => {
-        if (!err && data) {
+    _data.read('tokens', id, (dataReadError, data) => {
+        if (!dataReadError && data) {
             // Check that the token is for the given user and has not expired.
             if (data.phone === phone && data.expires > Date.now()) {
                 callback(true);
