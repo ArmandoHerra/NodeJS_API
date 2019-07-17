@@ -4,104 +4,104 @@
  */
 
 // Dependencies.
-const fs = require("fs");
-const path = require("path");
-const helpers = require('./helpers')
+const fs = require('fs');
+const path = require('path');
+const helpers = require('./helpers');
 
 // Container for the moule (to be exported).
 const lib = {};
 
 // Base dorectpru pf the data folder.
-lib.baseDir = path.join(__dirname, "/../.data/");
+lib.baseDir = path.join(__dirname, '/../.data/');
 
 // Write data to a file.
-lib.create = (dir, file, data, cb) => {
+lib.create = (dir, file, data, callback) => {
     // Open the file for writing.
     fs.open(
         `${lib.baseDir}${dir}/${file}.json`,
-        "wx",
-        (err, fileDescriptor) => {
-            if (!err && fileDescriptor) {
+        'wx',
+        (fsOpenError, fileDescriptor) => {
+            if (!fsOpenError && fileDescriptor) {
                 // Convert data to string.
                 const stringData = JSON.stringify(data);
                 // Write to file and close it.
-                fs.writeFile(fileDescriptor, stringData, err => {
-                    if (!err) {
-                        fs.close(fileDescriptor, err => {
-                            if (!err) {
-                                cb(false);
+                fs.writeFile(fileDescriptor, stringData, (fsWriteError) => {
+                    if (!fsWriteError) {
+                        fs.close(fileDescriptor, (fsCloseError) => {
+                            if (!fsCloseError) {
+                                callback(false);
                             } else {
-                                cb("Error closing new file.");
+                                callback('Error closing new file.');
                             }
                         });
                     } else {
-                        cb("Error writing to new file.");
+                        callback('Error writing to new file.');
                     }
                 });
             } else {
-                cb("Could not create new file, it may already exist.");
+                callback('Could not create new file, it may already exist.');
             }
-        }
+        },
     );
 };
 
 // Read data from a file.
-lib.read = (dir, file, cb) => {
-    fs.readFile(`${lib.baseDir}${dir}/${file}.json`, "utf-8", (err, data) => {
+lib.read = (dir, file, callback) => {
+    fs.readFile(`${lib.baseDir}${dir}/${file}.json`, 'utf-8', (err, data) => {
         if (!err && data) {
-            const parsedData = helpers.parseJsonToObject(data)
-            cb(false, parsedData)
+            const parsedData = helpers.parseJsonToObject(data);
+            callback(false, parsedData);
         } else {
-            cb(err, data);
+            callback(err, data);
         }
     });
 };
 
 // Update data inside a file.
-lib.update = (dir, file, data, cb) => {
+lib.update = (dir, file, data, callback) => {
     // Open the file for writing.
     fs.open(
         `${lib.baseDir}${dir}/${file}.json`,
-        "r+",
+        'r+',
         (err, fileDescriptor) => {
             if (!err && fileDescriptor) {
                 // Convert data to string.
                 const stringData = JSON.stringify(data);
                 // Truncate the file.
-                fs.ftruncate(fileDescriptor, err => {
-                    if (!err) {
-                        fs.writeFile(fileDescriptor, stringData, err => {
-                            if (!err) {
-                                fs.close(fileDescriptor, err => {
-                                    if (!err) {
-                                        cb(false);
+                fs.ftruncate(fileDescriptor, (fsFtruncateError) => {
+                    if (!fsFtruncateError) {
+                        fs.writeFile(fileDescriptor, stringData, (fsWriteError) => {
+                            if (!fsWriteError) {
+                                fs.close(fileDescriptor, (fsCloseError) => {
+                                    if (!fsCloseError) {
+                                        callback(false);
                                     } else {
-                                        cb("Error closing the file.");
+                                        callback('Error closing the file.');
                                     }
                                 });
                             } else {
-                                cb("Error writing to existing file.");
+                                callback('Error writing to existing file.');
                             }
                         });
                     } else {
-                        cb("Error truncating file.");
+                        callback('Error truncating file.');
                     }
                 });
             } else {
-                cb("Could not open the file for updating, it may not exist.");
+                callback('Could not open the file for updating, it may not exist.');
             }
-        }
+        },
     );
 };
 
 // Delete data file.
-lib.delete = (dir, file, cb) => {
+lib.delete = (dir, file, callback) => {
     // Unlink the file.
-    fs.unlink(`${lib.baseDir}${dir}/${file}.json`, err => {
-        if (!err) {
-            cb(false);
+    fs.unlink(`${lib.baseDir}${dir}/${file}.json`, (fsUnlinkError) => {
+        if (!fsUnlinkError) {
+            callback(false);
         } else {
-            cb("Error deleting file.");
+            callback('Error deleting file.');
         }
     });
 };
