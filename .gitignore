@@ -65,3 +65,4 @@ src/https/
 src/lib/twilio.ts
 
 .vscode
+src/.data
