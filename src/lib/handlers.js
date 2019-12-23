@@ -557,6 +557,40 @@ handlers._checks.post = (data, callback) => {
 
 
 // Checks - get.
+// Required data: id
+// Optional data: none
+handlers._checks.get = (data, callback) => {
+    // Check that the id is valid.
+    const id = typeof (data.queryStringObject.id) === 'string'
+        && data.queryStringObject.id.trim().length === 36
+        ? data.queryStringObject.id.trim()
+        : false;
+    if (id) {
+        // Lookup the check.
+        _data.read('checks', id, (dataReadError, dataReadData) => {
+            if (!dataReadError && dataReadData) {
+                // Get the token from the headers.
+                const token = typeof (data.headers.token) === 'string' ? data.headers.token : false;
+                // Verify that the given token is valid and belongs to the user that created the check.
+                handlers._tokens.verifyToken(token, dataReadData.userPhone, (tokenIsValid) => {
+                    if (tokenIsValid) {
+                        // Return the check data.
+                        callback(200, dataReadData);
+                    } else {
+                        callback(403);
+                    }
+                });
+            } else {
+                callback(404);
+            }
+        })
+    } else {
+        callback(400, {
+            Error: 'Missing required field.',
+        });
+    }
+};
+
 // Checks - put.
 // Checks - delete.
 
