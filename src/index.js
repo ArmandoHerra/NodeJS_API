@@ -23,9 +23,7 @@ const handlers = require('./lib/handlers');
 // Define a request router.
 const router = {
     ping: handlers.ping,
-    users: handlers.users,
-    tokens: handlers.tokens,
-    checks: handlers.checks,
+    hello: handlers.hello
 };
 
 // All the server logic for both the HTTP and HTTPS server.
@@ -102,25 +100,6 @@ const httpServer = http.createServer((req, res) => {
 httpServer.listen(config.httpPort, () => {
     console.log(
         `The server is listening on port ${config.httpPort} in ${
-            config.envName
-        } mode`,
-    );
-});
-
-// Instantiate the HTTPS server.
-const httpsServerOptions = {
-    key: fs.readFileSync(`${__dirname}/https/key.pem`),
-    cert: fs.readFileSync(`${__dirname}/https/cert.pem`),
-};
-
-const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
-    unifiedServer(req, res);
-});
-
-// Start the HTTPS server, and have it listen on the environment port.
-httpsServer.listen(config.httpsPort, () => {
-    console.log(
-        `The server is listening on port ${config.httpsPort} in ${
             config.envName
         } mode`,
     );

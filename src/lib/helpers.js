@@ -50,5 +50,5 @@ helpers.createRandomString = (strLength) => {
     return false;
 };
 
-// Export the moodule.
+// Export the module.
 module.exports = helpers;

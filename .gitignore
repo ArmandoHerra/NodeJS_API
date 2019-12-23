@@ -63,3 +63,5 @@ typings/
 server/
 src/https/
 src/lib/twilio.ts
+
+.vscode/
